@@ -1,72 +1,81 @@
-Log Analizatoru
+# Log Analizatoru
 
 Bu Python skripti, server loglarını analiz etmək, uğursuz giriş cəhdlərini müəyyən etmək, qara siyahıya alınmış domenlər haqqında məlumat toplamaq və nəticələri müxtəlif formatlarda saxlamaq üçün nəzərdə tutulmuşdur.
 
-İşləmə Prinsipi
+## İşləmə Prinsipi
 
 Skript aşağıdakı addımları yerinə yetirir:
-	1.	Logların Pars Edilməsi:
-access_log.txt faylından log qeydlərini oxuyur və müvafiq məlumatları (IP ünvanı, tarix, HTTP metodu, URL və status kodu) çıxarır.
-	2.	URL-lərin Analizi:
-Bütün URL-ləri və onların status kodlarını analiz edir, nəticələri url_status_report.txt faylında saxlayır.
-	3.	Uğursuz Girişlərin Siyahıya Alınması:
-40x status kodları ilə nəticələnmiş URL-ləri analiz edir və məlumatları malware_candidates.csv faylında saxlayır.
-	4.	Təhdid Məlumatlarının Əldə Edilməsi:
-Müəyyən edilmiş URL-dən (http://127.0.0.1:8000/threat_feed.html) qara siyahıya alınmış domenlər haqqında məlumatı “Selenium” kitabxanası vasitəsilə web scraping edir.
-	5.	Uyğunlaşdırma:
-Parse edilmiş loglardakı URL-ləri əldə edilmiş qara siyahıya alınmış domenlərlə uyğunlaşdırır və nəticələri JSON formatında (alert.json) saxlayır.
-	6.	Məlumatların Ümumiləşdirilməsi:
-Analiz nəticələrini qısa şəkildə ümumiləşdirərək summary_report.json faylında saxlayır.
 
-Tələblər
-	•	Python 3
-	•	Aşağıdakı Python kitabxanaları:
-	•	re (daxili kitabxana)
-	•	json (daxili kitabxana)
-	•	csv (daxili kitabxana)
-	•	selenium (pip install selenium)
+1.  **Logların Pars Edilməsi:** `access_log.txt` faylından log qeydlərini oxuyur və müvafiq məlumatları (IP ünvanı, tarix, HTTP metodu, URL və status kodu) çıxarır.
+2.  **URL-lərin Analizi:** Bütün URL-ləri və onların status kodlarını analiz edir, nəticələri `url_status_report.txt` faylında saxlayır.
+3.  **Uğursuz Girişlərin Siyahıya Alınması:** 40x status kodları ilə nəticələnmiş URL-ləri analiz edir və məlumatları `malware_candidates.csv` faylında saxlayır.
+4.  **Təhdid Məlumatlarının Əldə Edilməsi:** Müəyyən edilmiş URL-dən (`http://127.0.0.1:8000/threat_feed.html`) qara siyahıya alınmış domenlər haqqında məlumatı "Selenium" kitabxanası vasitəsilə web scraping edir.
+5.  **Uyğunlaşdırma:** Parse edilmiş loglardakı URL-ləri əldə edilmiş qara siyahıya alınmış domenlərlə uyğunlaşdırır və nəticələri JSON formatında (`alert.json`) saxlayır.
+6.  **Məlumatların Ümumiləşdirilməsi:** Analiz nəticələrini qısa şəkildə ümumiləşdirərək `summary_report.json` faylında saxlayır.
 
-İstifadə
-	1.	Virtual mühit yaradın:
+## Tələblər
 
-python -m venv myenv  
+*   Python 3
+*   Aşağıdakı Python kitabxanaları:
+    *   `re` (daxili kitabxana)
+    *   `json` (daxili kitabxana)
+    *   `csv` (daxili kitabxana)
+    *   `selenium` (`pip install selenium`)
 
+## İstifadə
 
-	2.	Virtual mühiti aktivləşdirin:
-	•	Linux/MacOS:
+1.  Virtual mühit yaradın:
 
-source myenv/bin/activate  
+    ```bash
+    python -m venv myenv
+    ```
 
+2.  Virtual mühiti aktivləşdirin:
 
-	•	Windows:
+    *   Linux/MacOS:
 
-myenv\Scripts\activate  
+        ```bash
+        source myenv/bin/activate
+        ```
 
+    *   Windows:
 
-	3.	Lazımlı kitabxanaları quraşdırın:
+        ```bash
+        myenv\Scripts\activate
+        ```
 
-pip install -r requirements.txt  
+3.  Lazımlı kitabxanaları quraşdırın (əgər `requirements.txt` faylınız varsa):
 
+    ```bash
+    pip install -r requirements.txt
+    ```
+    Əgər `requirements.txt` faylınız yoxdursa, sadəcə `selenium` quraşdırın:
+        ```bash
+    pip install selenium
+    ```
 
-	4.	Lokal Veb Serveri Başladın:
-Təhdid məlumatlarını toplamaq üçün index.html faylını lokal HTTP serverində işlədin:
+4.  Lokal Veb Serveri Başladın:
 
-python -m http.server 8000  
+    Təhdid məlumatlarını toplamaq üçün `index.html` faylını lokal HTTP serverində işlədin:
 
+    ```bash
+    python -m http.server 8000
+    ```
 
-	5.	Skripti işə salın:
+5.  Skripti işə salın:
 
-python log_analyzer.py  
+    ```bash
+    python log_analyzer.py
+    ```
 
-Fayl Strukturası
+## Fayl Strukturası
 
 Bütün fayllar eyni qovluqda olmalıdır:
-	•	log_analyzer.py (Bu skript)
-	•	access_log.txt (Analiz ediləcək log faylı)
-	•	index.html (Qara siyahıya alınmış domenlər haqqında məlumatları saxlayan HTML faylı)
-	•	url_status_report.txt (URL-lər və onların status kodları)
-	•	malware_candidates.csv (Uğursuz girişlər (CSV))
-	•	alert.json (Uyğunlaşdırılmış təhdid məlumatları (JSON))
-	•	summary_report.json (Ümumiləşdirilmiş analiz nəticələri)
 
-  
+*   `log_analyzer.py` (Bu skript)
+*   `access_log.txt` (Analiz ediləcək log faylı)
+*   `index.html` (Qara siyahıya alınmış domenlər haqqında məlumatları saxlayan HTML faylı)
+*   `url_status_report.txt` (URL-lər və onların status kodları)
+*   `malware_candidates.csv` (Uğursuz girişlər (CSV))
+*   `alert.json` (Uyğunlaşdırılmış təhdid məlumatları (JSON))
+*   `summary_report.json` (Ümumiləşdirilmiş analiz nəticələri)
